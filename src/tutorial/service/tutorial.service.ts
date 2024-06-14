@@ -3,13 +3,21 @@ import { DataSnapshot, get, push, ref, set } from 'firebase/database';
 import { firebaseDataBase } from 'src/firebase.config';
 import axios from 'axios';
 import { NotificacionDto } from '../dto/notificacion-create.dto';
+import { timeStamp } from 'console';
 @Injectable()
 export class TutorialService {
 
   async createData(data: NotificacionDto): Promise<void> {
     const dataRef = ref(firebaseDataBase, 'Data');
 
-
+    const ahora = new Date();
+    const dia = ahora.getDate();
+    const hora = ahora.getHours();
+    const mes = ahora.getMonth() + 1;
+    let minutos:any=ahora.getMinutes();
+    if (minutos < 10) {
+      minutos ="0"+minutos;
+    }
     // Enviar solicitud HTTP POST a OneSignal
     const notificationData = {
       "app_id": "7bb3c888-1958-46dc-b92b-1214692ed5b5",
@@ -21,8 +29,14 @@ export class TutorialService {
       "ios_attachments": {
         "id": data.urlimagen
       },
-      "small_icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Sena_Colombia_logo.svg/2090px-Sena_Colombia_logo.svg.png",
-      "chrome_web_icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Sena_Colombia_logo.svg/2090px-Sena_Colombia_logo.svg.png"
+      "small_icon": "https://static.vecteezy.com/system/resources/previews/004/879/664/non_2x/simple-icon-of-a-paper-airplane-for-delivery-free-vector.jpg",
+      "chrome_web_icon": "https://static.vecteezy.com/system/resources/previews/004/879/664/non_2x/simple-icon-of-a-paper-airplane-for-delivery-free-vector.jpg",
+      "time":{
+       "hora": hora,
+       "dia":dia,
+       "mes": mes,
+       "minutos":minutos,
+      }
     };
 
     const headers = {
